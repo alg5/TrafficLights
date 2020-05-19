@@ -35,9 +35,9 @@ class TrafficLight extends EventEmitter {
         // this.emit(eventName, data);
    // }
 }
-let green = new TrafficLight(ColorEnum.Green.value, 5000);
-let yellow = new TrafficLight(ColorEnum.Yellow.value, 2500);
-let red = new TrafficLight(ColorEnum.Red.value, 7000);
+let green = new TrafficLight(ColorEnum.Green.value, 15000);
+let yellow = new TrafficLight(ColorEnum.Yellow.value, 5000);
+let red = new TrafficLight(ColorEnum.Red.value, 25000);
 green.on(eventName, function(status){
 	green.status = status;
 });

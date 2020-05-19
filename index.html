@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Traffic Lights</title>
+    <meta charset="utf-8" />
+	<style>
+	div {
+	
+		width: 60px;
+		height: 60px;
+		border-radius: 50%;
+	}
+	.off
+	{
+		background: #ebebeb;
+	}
+	.red
+	{
+		background:red;
+	}
+	.yellow
+	{
+		background:yellow;
+	}
+	.green
+	{
+		background:green;
+	}
+	.blink
+	{
+		@keyframes up-right {
+			0% {<!--from w w w .  j  a va 2  s. c  o m-->
+				transform: scale(1);
+				opacity: .25
+			}
+			50% {
+				transform: scale (1, 5);
+				opacity: 1;
+			}
+			100% {
+				transform: scale(1);
+				opacity: .25;
+			}
+		}
+		background-color: green;
+		animation: up-right 1s infinite;
+	/*	.red {
+			background-color: red;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			-webkit-animation: up-right 1s infinite;
+			-moz-animation: up-right 1s infinite;
+			-o-animation: up-right 1s infinite;
+			animation: up-right 1s infinite;
+		}
+*/		
+	}
+	</style>
+	
+	<script src="jquery.min.js"></script>
+
+	<script>
+		var time = 1000;
+		const ColorEnum = 
+		{
+			Green: 1, 
+			Yellow: 2, 
+			Red: 3
+		}
+		const StatusEnum =
+		{
+			Off: 0, 
+			On: 1, 
+		}
+		const BlinkEnum =
+		{
+			Off: 0, 
+			On: 1, 
+		}
+		
+		$(document).ready(function(){
+			 setInterval(function() {
+				 GetTrafficStatusAjax();	
+			 }, time);
+		});
+		function GetTrafficStatusAjax()
+		{
+			var jqxhr = $.ajax( "http://localhost:3000" )
+			  .done(function(result) {
+				//console.log(result);
+				setColor(result);
+				//alert( "success" );
+			  })
+			  .fail(function(jqXHR, textStatus) {
+				console.log(jqXHR);
+				alert( "Request failed: " + textStatus );
+			  })
+		}
+		function setColor(data)
+		{
+			var arr = jQuery.parseJSON(data);
+			//console.log(data);
+			var green = jQuery.grep(arr, function( item, index ) {
+			  return ( item.color == ColorEnum.Green  );
+			})[0];
+			var yellow = jQuery.grep(arr, function( item, index ) {
+			  return ( item.color == ColorEnum.Yellow  );
+			})[0];			
+			var red = jQuery.grep(arr, function( item, index ) {
+			  return ( item.color == ColorEnum.Red  );
+			})[0];				
+
+			var greenClass = green.status == 1 ? "green" : "off";
+			var yellowClass = yellow.status == 1 ? "yellow" : "off";
+			var redClass = red.status == 1 ? "red" : "off";
+			var greenClassBlink = green.blink == 1 ? "blink" : "";
+//console.log(green);
+console.log(green.blink + '; ' + greenClassBlink);
+			//console.log(red.status + '; ' + redClass);
+			$("#green").removeClass().addClass(greenClass).addClass(greenClassBlink);
+			$("#yellow").removeClass().addClass(yellowClass);
+			$("#red").removeClass().addClass(redClass);
+		}
+	</script>
+</head>
+<body>
+    <h1>Traffic Lights</h1>
+	<div id="red" class="off"></div>
+	<div id="yellow" class="off"></div>
+	<div id="green" class="off"></div>
+	
+</body>
+</html>
