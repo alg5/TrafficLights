@@ -37,7 +37,7 @@ class TrafficLight extends EventEmitter {
 }
 let green = new TrafficLight(ColorEnum.Green.value, 15000);
 let yellow = new TrafficLight(ColorEnum.Yellow.value, 5000);
-let red = new TrafficLight(ColorEnum.Red.value, 25000);
+let red = new TrafficLight(ColorEnum.Red.value, 20000);
 green.on(eventName, function(status){
 	green.status = status;
 });
@@ -54,7 +54,7 @@ async function waitGreen(duration) {
   console.log('waitGreen');
   await sleepPromise(duration) 
   green.blink = BlinkEnum.On;
-  yellow.emit(eventName, StatusEnum.On);
+ // yellow.emit(eventName, StatusEnum.On);
   console.log('end waitGreen');
   getAllStatuses();
   waitGreenBlink(yellow.duration);
