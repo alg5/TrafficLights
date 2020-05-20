@@ -12,12 +12,16 @@ const StatusEnum = new Enum(
 	{
 		'Off': 0, 
 		'On': 1, 
+		'blink' : 2,
 	}
 ); 
-const BlinkEnum = new Enum(
+const DurtionEnum = new Enum(
 	{
-		'Off': 0, 
-		'On': 1, 
+		Green: 15000, 
+		Yellow: 5000, 
+		Red: 20000, 
+		GreenBlink: 3000, 
+		RedYellow: 2500, 
 	}
 );
 let eventName = "SetColor";
@@ -29,15 +33,12 @@ class TrafficLight extends EventEmitter {
         this.color = color;
         this.duration = duration;
 		this.status = StatusEnum.Off.value;
-		this.blink = BlinkEnum.Off;
     }
-    // sayStatus(data) {
-        // this.emit(eventName, data);
-   // }
+
 }
-let green = new TrafficLight(ColorEnum.Green.value, 15000);
-let yellow = new TrafficLight(ColorEnum.Yellow.value, 5000);
-let red = new TrafficLight(ColorEnum.Red.value, 20000);
+let green = new TrafficLight(ColorEnum.Green.value, DurtionEnum.Green);
+let yellow = new TrafficLight(ColorEnum.Yellow.value, DurtionEnum.Yellow);
+let red = new TrafficLight(ColorEnum.Red.value, DurtionEnum.Red);
 green.on(eventName, function(status){
 	green.status = status;
 });
@@ -53,16 +54,14 @@ async function sleepPromise(time) {
 async function waitGreen(duration) {
   console.log('waitGreen');
   await sleepPromise(duration) 
-  green.blink = BlinkEnum.On;
- // yellow.emit(eventName, StatusEnum.On);
+  green.emit(eventName, StatusEnum.blink);
   console.log('end waitGreen');
   getAllStatuses();
-  waitGreenBlink(yellow.duration);
+  waitGreenBlink(DurtionEnum.GreenBlink);
 }
 async function waitGreenBlink(duration) {
   console.log('waitGreenBlink');
   await sleepPromise(duration) 
-  green.blink = BlinkEnum.Off;
   green.emit(eventName, StatusEnum.Off);
   yellow.emit(eventName, StatusEnum.On);
   console.log('end waitGreenBlink');
@@ -88,7 +87,7 @@ async function waitRedYellow(duration) {
   green.emit(eventName, StatusEnum.On);
   console.log('end waitRedYellow');
   getAllStatuses();
-  waitGreen(green.duration);
+  waitGreen(DurtionEnum.RedYellow);
 }
 
 async function waitYellow(duration) {
@@ -104,7 +103,6 @@ async function waitYellow(duration) {
 async function waitRed(duration) {
   console.log('waitRed');
   await sleepPromise(duration) 
-  //red.emit(eventName, StatusEnum.Off);
   yellow.emit(eventName, StatusEnum.On);
   console.log('end waitRed');
   getAllStatuses();
@@ -113,12 +111,9 @@ async function waitRed(duration) {
 function getAllStatuses()
 {
 	let htmlString = "getAllStatuses: " + ColorEnum.Green.toString() + ": status = " + green.status + "; ";
-	if (green.blink == BlinkEnum.On) 
-		htmlString += " blink; ";
 	htmlString += ColorEnum.Yellow.toString() + ": status = " + yellow.status + "; " ;
 	htmlString += ColorEnum.Red.toString() + ": status = " + red.status + "; " ;
 	console.log(htmlString);
-
 }
 
 module.exports.setColorTrafficLight = function(){
@@ -127,12 +122,6 @@ module.exports.setColorTrafficLight = function(){
 	green.emit(eventName, StatusEnum.Off);
 	getAllStatuses();
 	waitRed(red.duration);
-	// setTimeout(function(){
-			 
-			// console.log("timeout " + green.duration);
-	// }, green.duration);
-//green.emit(eventName, StatusEnum.Off);
-
 }
 module.exports.TrafficLight = TrafficLight;
 module.exports.green = green;
@@ -142,6 +131,3 @@ module.exports.red = red;
 
 module.exports.ColorEnum = ColorEnum;
 module.exports.StatusEnum = StatusEnum;
-module.exports.BlinkEnum = BlinkEnum;
-
-// module.exports.sleepPromise = sleepPromise;

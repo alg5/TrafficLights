@@ -26,7 +26,8 @@
 	{
 		background:green;
 	}
-	.blink
+	
+	.green-blink
 	{
 		@keyframes up-right {
 			0% {<!--from w w w .  j  a va 2  s. c  o m-->
@@ -42,9 +43,9 @@
 				opacity: .25;
 			}
 		}
-		background-color: green;
+		background-color: #00BF00;
 		animation: up-right 1s infinite;
-	/*	.red {
+		.green {
 			background-color: red;
 			position: absolute;
 			top: 50%;
@@ -54,7 +55,7 @@
 			-o-animation: up-right 1s infinite;
 			animation: up-right 1s infinite;
 		}
-*/		
+/**/		
 	}
 	</style>
 	
@@ -72,11 +73,7 @@
 		{
 			Off: 0, 
 			On: 1, 
-		}
-		const BlinkEnum =
-		{
-			Off: 0, 
-			On: 1, 
+			Blink: 2,
 		}
 		
 		$(document).ready(function(){
@@ -94,7 +91,7 @@
 			  })
 			  .fail(function(jqXHR, textStatus) {
 				console.log(jqXHR);
-				alert( "Request failed: " + textStatus );
+			//	alert( "Request failed: " + textStatus );
 			  })
 		}
 		function setColor(data)
@@ -111,12 +108,12 @@
 			  return ( item.color == ColorEnum.Red  );
 			})[0];				
 
-			var greenClass = green.status == 1 ? "green" : "off";
-			var yellowClass = yellow.status == 1 ? "yellow" : "off";
-			var redClass = red.status == 1 ? "red" : "off";
-			var greenClassBlink = green.blink == 1 ? "blink" : "";
+			var greenClass = green.status == StatusEnum.Off ? "off" : "green";
+			var yellowClass = yellow.status == StatusEnum.Off ? "off" : "yellow";
+			var redClass = red.status == StatusEnum.Off ? "off" :"red";
+			var greenClassBlink = green.status == StatusEnum.On ? "green-blink" : "";
 //console.log(green);
-console.log(green.blink + '; ' + greenClassBlink);
+console.log(green.status + '; ' + greenClassBlink);
 			//console.log(red.status + '; ' + redClass);
 			$("#green").removeClass().addClass(greenClass).addClass(greenClassBlink);
 			$("#yellow").removeClass().addClass(yellowClass);

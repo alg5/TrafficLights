@@ -1,13 +1,13 @@
 const Enum = require('enum');
 const traffic = require("./traffic");
-const http = require("http");
-const fs = require("fs");
-const querystring = require('querystring');
-const url = require('url');
+//const http = require("http");
+//const fs = require("fs");
+//const querystring = require('querystring');
+//const url = require('url');
 const express = require("express");
   
 const app = express();
-var cors = require('cors')
+const cors = require('cors')
 
 app.use(cors());
 app.use('/', function(request, response, next){
@@ -29,11 +29,11 @@ app.listen(3000, "127.0.0.1",function(){
 });
 function GetTrafficStatus() {
 	let arr = Array();
-	let item = {color: traffic.green.color, status: traffic.green.status.value, blink: traffic.green.blink.value };
+	let item = {color: traffic.green.color, status: traffic.green.status.value };
 	arr.push(item);
-	item = {color: traffic.yellow.color, status: traffic.yellow.status.value, blink: traffic.yellow.blink.value };
+	item = {color: traffic.yellow.color, status: traffic.yellow.status.value };
 	 arr.push(item);
-	item = {color: traffic.red.color, status: traffic.red.status.value, blink: traffic.red.blink.value };
+	item = {color: traffic.red.color, status: traffic.red.status.value };
 	arr.push(item);
 	var myJsonString = JSON.stringify(arr);
 	return myJsonString;
